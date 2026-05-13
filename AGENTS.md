@@ -688,3 +688,30 @@ Explicit handoffs help both the AI and the user track what just happened, and gi
 | Not sure                                     | `pm`              |
 
 **When in doubt: PM first, build second. For fast-path tasks: skip PM, just do it.**
+
+---
+
+## Cursor Cloud specific instructions
+
+This section captures non-obvious caveats for Cloud Agents running in the Cursor Cloud VM environment.
+
+### Services
+
+| Service | Start command | Port | Notes |
+|---------|--------------|------|-------|
+| Vite dev server (frontend SPA) | `npm run dev` | 3000 | Only service needed for development. HMR supported. |
+
+There is no backend server yet — `server.js` does not exist. The `npm start` script will fail. All data is hardcoded mock data in `src/app.jsx`.
+
+### Key commands
+
+- **Dev server:** `npm run dev` (Vite, port 3000)
+- **Build:** `npm run build` (outputs to `dist/`)
+- **Preview prod build:** `npm run preview`
+
+### Gotchas
+
+- The project has no linter, test runner, or formatter configured. There are no `lint`, `test`, or `format` scripts in `package.json`.
+- The `.env.local` file is created by `bash setup.sh` from `.env.example`. The API keys in it are placeholders — external integrations (Sage Intacct, CoAdvantage, OCR) are not yet wired up, so missing keys do not block development.
+- The Dockerfile uses `node:20-slim` while the dev environment uses Node 22. This has no practical impact for local development.
+- Fonts (JetBrains Mono, Outfit) are loaded via Google Fonts CDN in the app code, not installed locally.
