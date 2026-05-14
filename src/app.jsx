@@ -5,7 +5,7 @@ import { useState } from 'react';
 function App() {
     
   const T = {
-    bg: "#0A0D10",
+    bg: "#FDE2E2",
     surface: "#11151A", 
     border: "#1E2530",
     accent: "#F0A830",
