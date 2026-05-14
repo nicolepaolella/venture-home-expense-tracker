@@ -688,3 +688,28 @@ Explicit handoffs help both the AI and the user track what just happened, and gi
 | Not sure                                     | `pm`              |
 
 **When in doubt: PM first, build second. For fast-path tasks: skip PM, just do it.**
+
+---
+
+## Cursor Cloud specific instructions
+
+### Service overview
+
+This is a client-side React SPA (no backend server yet). The only service to run is the Vite dev server.
+
+### Commands
+
+| Action | Command | Notes |
+|--------|---------|-------|
+| Install deps | `npm install` | Run from repo root |
+| Dev server | `npm run dev` | Serves on `http://localhost:3000` |
+| Production build | `npm run build` | Outputs to `dist/` |
+| Preview prod build | `npm run preview` | Serves the `dist/` folder |
+
+### Caveats
+
+- **No ESLint or linter is configured.** Verify correctness via `npm run build` (Vite/Rollup will catch import and syntax errors).
+- **No automated test framework** is set up yet. Validate changes by running `npm run build` and manual testing.
+- **No backend server exists.** `server.js` is referenced in `package.json` `start` script but the file does not exist. The app is a pure client-side SPA with hardcoded mock data.
+- **External integrations (Sage Intacct, CoAdvantage, OCR) have no implementation code.** The `.env.example` lists their API key names but nothing reads them yet.
+- **Node 22** is available in the environment; the Dockerfile uses Node 20 for production builds but local dev works fine on 22.
