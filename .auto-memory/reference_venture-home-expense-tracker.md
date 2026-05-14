@@ -11,8 +11,8 @@ type: reference
 - **Cloud Run URL**: TBD — set after first deploy
 - **Region**: us-east1
 - **GCS bucket**: TBD
-- **GitHub repo**: TBD — set during Phase 1
-- **Local path**: `~/Documents/Claude/projects/venture-home-expense-tracker`
+- **GitHub repo**: `https://github.com/nicolepaolella/venture-home-expense-tracker` — confirmed 2026-05-14 from `git remote -v`
+- **Local path**: `/workspace` in Cursor Cloud; original local scaffold path was `~/Documents/Claude/projects/venture-home-expense-tracker`
 
 ## Environment Variables
 
