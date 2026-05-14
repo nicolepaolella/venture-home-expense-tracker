@@ -19,10 +19,12 @@ type: project
 ## Component Map
 
 - `src/app.jsx` — single-file React prototype for the manager dashboard and report detail flow
+- `server.js` — production static server for the built Vite app with a `/healthz` endpoint
 - `.github/workflows/ci.yml` — CI workflow that verifies dependency installation and production build health
 
 ## Current State
 
 Phase 0 complete. Prototype UI exists and builds successfully.
 GitHub repo is connected and CI build checks are configured.
-Cloud Run runtime remains incomplete because `package.json` references `node server.js`, but `server.js` is not present in the repo yet.
+Production runtime now exists and starts successfully via `node server.js`.
+Cloud Run deployment is blocked by missing Google Cloud credentials in the cloud agent environment, not by missing repo code.

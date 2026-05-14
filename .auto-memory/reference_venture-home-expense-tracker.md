@@ -8,12 +8,13 @@ type: reference
 
 - **GCP project**: `venture-home-expense-tracker` — confirmed during scaffold config
 - **Cloud Run service**: `venture-home-expense-tracker` — confirmed during scaffold config
-- **Cloud Run URL**: TBD — set after first deploy
+- **Cloud Run URL**: TBD — deployment blocked until Google Cloud credentials are configured for the agent environment
 - **Region**: us-east1
 - **GCS bucket**: TBD
 - **GitHub repo**: `https://github.com/nicolepaolella/venture-home-expense-tracker` — confirmed from `git remote -v`
 - **Workspace path**: `/workspace` — confirmed in Cursor cloud agent
 - **CI checks**: GitHub Actions workflow at `.github/workflows/ci.yml` runs `npm ci` and `npm run check` on pull requests and pushes to `main` and `cursor/**` branches
+- **Deployment tooling status**: Google Cloud CLI installed in the cloud agent, but `gcloud auth list` is empty so Cloud Run deploys are currently blocked on credentials
 
 ## Environment Variables
 
