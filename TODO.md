@@ -62,6 +62,7 @@ EZPass statements contain mix of tolls, payments, and credits that need manual e
 - [x] Configure GitHub Actions build checks for pushes and pull requests
 
 ### GCP & Cloud Run
+- [ ] Add a real runtime entrypoint for production (`package.json` currently references `node server.js`, but `server.js` is missing)
 - [ ] Test Docker build: `docker build -t venture-home-expense-tracker . && docker run -p 8080:8080 venture-home-expense-tracker`
 - [ ] Create GCP project: `gcloud projects create venture-home-expense-tracker --name="venture-home-expense-tracker"`
 - [ ] Link billing: https://console.cloud.google.com/billing/linkedaccount?project=venture-home-expense-tracker
