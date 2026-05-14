@@ -44,21 +44,22 @@ EZPass statements contain mix of tolls, payments, and credits that need manual e
 ## Phase 1: Setup
 
 ### Tool Verification (run these first)
-- [ ] Verify Node.js: `node --version` (requires v18+)
-- [ ] Verify npm: `npm --version`
-- [ ] Verify git: `git --version`
+- [x] Verify Node.js: `node --version` (requires v18+) — v22.22.2 in Cursor Cloud
+- [x] Verify npm: `npm --version` — 10.9.7 in Cursor Cloud
+- [x] Verify git: `git --version` — 2.43.0 in Cursor Cloud
 - [ ] Verify Docker: `docker --version`
 - [ ] Verify gcloud: `gcloud --version` (install from https://cloud.google.com/sdk/docs/install if missing)
+  - Cursor Cloud note 2026-05-14: `docker` and `gcloud` were not available on PATH, so Cloud Run deploy was not attempted.
 
 ### Project Initialization
-- [ ] Extract scaffold zip to `~/Documents/Claude/projects/venture-home-expense-tracker`
-- [ ] `cd ~/Documents/Claude/projects/venture-home-expense-tracker && npm install`
+- [x] Extract scaffold zip to `~/Documents/Claude/projects/venture-home-expense-tracker` — project is present in `/workspace` in Cursor Cloud
+- [x] `cd ~/Documents/Claude/projects/venture-home-expense-tracker && npm install` — dependencies are installed in Cursor Cloud
 - [ ] Copy `.env.example` → `.env.local` and fill in values
-- [ ] Verify local dev server: `npm run dev`
-- [ ] Initialize git: `git init && git add -A && git commit -m "initial scaffold from Ignition"`
-- [ ] Create GitHub repo and push: `gh repo create venture-home-expense-tracker --source . --push`
-- [ ] Set up `.auto-memory/` directory and `MEMORY.md` index
-- [ ] Update `.auto-memory/reference_venture-home-expense-tracker.md` with GitHub URL
+- [x] Verify local dev server: `npm run dev` — Vite preview runs on port 3000 in Cursor Cloud
+- [x] Initialize git: `git init && git add -A && git commit -m "initial scaffold from Ignition"` — initial commit exists
+- [x] Create GitHub repo and push: `gh repo create venture-home-expense-tracker --source . --push` — origin points to `nicolepaolella/venture-home-expense-tracker`
+- [x] Set up `.auto-memory/` directory and `MEMORY.md` index
+- [x] Update `.auto-memory/reference_venture-home-expense-tracker.md` with GitHub URL
 
 ### GCP & Cloud Run
 - [ ] Test Docker build: `docker build -t venture-home-expense-tracker . && docker run -p 8080:8080 venture-home-expense-tracker`
@@ -68,7 +69,7 @@ EZPass statements contain mix of tolls, payments, and credits that need manual e
 - [ ] Create Artifact Registry: `gcloud artifacts repositories create venture-home-expense-tracker --repository-format=docker --location=us-east1 --project venture-home-expense-tracker`
 - [ ] First Cloud Run deploy: `gcloud run deploy venture-home-expense-tracker --source . --region us-east1 --project venture-home-expense-tracker --allow-unauthenticated` (use `--update-env-vars`, never `--set-env-vars`)
 - [ ] Update `.auto-memory/reference_venture-home-expense-tracker.md` with Cloud Run URL + GCP project ID
-- [ ] Write first session file: `docs/memory/YYYY-MM-DD.md`
+- [x] Write first session file: `docs/memory/YYYY-MM-DD.md` — `docs/memory/2026-05-14.md`
 
 ### Sage Intacct Setup
 - [ ] Obtain API credentials for Sage Intacct
@@ -92,9 +93,9 @@ EZPass statements contain mix of tolls, payments, and credits that need manual e
 - [ ] Write confirmed endpoints and auth details to `docs/memory/YYYY-MM-DD.md` as `[Tier 1]`
 
 ## Phase 2: Prototype
-- [ ] Build core UI with mock data
-- [ ] Implement main views and interactions
-- [ ] Verify mock mode works end-to-end
+- [x] Build core UI with mock data
+- [x] Implement main views and interactions
+- [x] Verify mock mode works end-to-end — browser-tested in Cursor Cloud on 2026-05-14
 - [ ] Deploy prototype to Cloud Run for review
 
 ### What the prototype already covers:

@@ -77,7 +77,9 @@ Before shipping the product publicly, a final pass on this file should:
 
 - [Getting Started](#getting-started)
 - [Features](#features)
-  - _No features yet — add entries as features ship_
+  - [Manager Approval Dashboard](#manager-approval-dashboard)
+  - [Expense Report Review](#expense-report-review)
+  - [Submit My Expenses](#submit-my-expenses)
 - [FAQ](#faq)
 - [Support](#support)
 
@@ -85,36 +87,63 @@ Before shipping the product publicly, a final pass on this file should:
 
 ## Getting Started
 
-_Replace this section when the product has a real first-run experience. For now, it's a placeholder._
+The current product is a prototype that runs with mock expense data. It is ready for review in a local preview, but it is not connected to real user accounts, OCR, Sage Intacct, CoAdvantage, or production storage yet.
 
 To start using **venture-home-expense-tracker**:
 
-1. [Step one — e.g., "Go to [url]" or "Download and install the app"]
-2. [Step two — sign up, connect a data source, configure something]
-3. [Step three — you're ready to go]
+1. Open the prototype preview URL.
+2. Review the **Manager Dashboard**.
+3. Use the tabs to switch between **Pending Approvals**, **Recently Approved**, and **Submit My Expenses**.
 
 ---
 
 ## Features
 
-_As features ship, add a new `###` section here using the template in the "For AI Tools" section above. Keep the newest feature at the top of this list, or organize by category — whichever makes the guide easier to navigate._
+### Manager Approval Dashboard
 
-<!-- Example entry — replace with real features as they ship -->
-
-### Example Feature (placeholder — delete when real features exist)
-
-**What it does:** A short description of what this feature is for, from the user's perspective.
+**What it does:** The dashboard shows pending expense reports that need manager review, including employee name, submission date, receipt count, total amount, and violation warnings.
 
 **How to use it:**
-1. Open the app and sign in
-2. Click **Example Feature** in the main navigation
-3. Fill in the form and click **Save**
+1. Open the prototype preview.
+2. Select **Pending Approvals**.
+3. Click **Review Expenses** on a report to inspect its line items.
 
 **Good to know:**
-- You need to be signed in to use this feature
-- Changes are saved automatically after 30 seconds of inactivity
+- The current dashboard uses mock data only.
+- Violation warnings are visible but do not block review.
 
-**Added:** 2026-05-12 · **Last updated:** 2026-05-12
+**Added:** 2026-05-14 · **Last updated:** 2026-05-14
+
+### Expense Report Review
+
+**What it does:** The report review screen lets a manager inspect every receipt line in an expense report before choosing whether to request more information, reject the report, or approve all items.
+
+**How to use it:**
+1. From **Pending Approvals**, click **Review Expenses**.
+2. Review the employee, submission date, receipt count, and report total.
+3. Check any red violation warnings on the report or individual line items.
+4. Use **Request More Info**, **Reject Report**, or **Approve All**.
+
+**Good to know:**
+- Line-item action buttons are visible in the prototype, but they do not persist changes yet.
+- Duplicate receipt warnings appear in red for quick review.
+
+**Added:** 2026-05-14 · **Last updated:** 2026-05-14
+
+### Submit My Expenses
+
+**What it does:** The submit view gives managers a place to start their own expense report while they also manage team approvals.
+
+**How to use it:**
+1. Open the prototype preview.
+2. Select **Submit My Expenses**.
+3. Click **Start Expense Report**.
+
+**Good to know:**
+- The button is part of the prototype flow and does not open a full submission form yet.
+- The planned workflow is mobile-first receipt upload followed by monthly report submission.
+
+**Added:** 2026-05-14 · **Last updated:** 2026-05-14
 
 ---
 
@@ -134,4 +163,4 @@ _Replace with real support channels when the product has them._
 
 ---
 
-_This guide is maintained alongside the codebase. Last revised: 2026-05-12._
+_This guide is maintained alongside the codebase. Last revised: 2026-05-14._

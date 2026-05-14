@@ -14,12 +14,13 @@ type: project
 
 ## Architecture Decisions
 
-_None yet — record decisions here as they're made._
+- **Prototype baseline**: The current prototype runs as a client-only React/Vite app with mock data in `src/app.jsx`. This keeps the expense workflow viewable in Cursor before live backend, OCR, Sage Intacct, or CoAdvantage integrations are connected.
 
 ## Component Map
 
-_Updated as components are built._
+- `src/app.jsx` — monolithic mobile-first manager dashboard prototype with pending approvals, recently approved reports, submit-my-expenses view, mock expense report data, and line-item violation warnings.
+- `src/main.jsx` — React entry point that mounts `App`.
 
 ## Current State
 
-Phase 0 complete. Phase 1 setup pending.
+Phase 1 local setup is verified in Cursor Cloud. Phase 2 prototype is viewable with mock data through Vite on port 3000; Cloud Run deployment is still pending.
