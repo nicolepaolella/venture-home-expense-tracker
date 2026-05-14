@@ -44,21 +44,22 @@ EZPass statements contain mix of tolls, payments, and credits that need manual e
 ## Phase 1: Setup
 
 ### Tool Verification (run these first)
-- [ ] Verify Node.js: `node --version` (requires v18+)
-- [ ] Verify npm: `npm --version`
-- [ ] Verify git: `git --version`
+- [x] Verify Node.js: `node --version` (requires v18+)
+- [x] Verify npm: `npm --version`
+- [x] Verify git: `git --version`
 - [ ] Verify Docker: `docker --version`
 - [ ] Verify gcloud: `gcloud --version` (install from https://cloud.google.com/sdk/docs/install if missing)
 
 ### Project Initialization
 - [ ] Extract scaffold zip to `~/Documents/Claude/projects/venture-home-expense-tracker`
-- [ ] `cd ~/Documents/Claude/projects/venture-home-expense-tracker && npm install`
+- [x] `cd ~/Documents/Claude/projects/venture-home-expense-tracker && npm install`
 - [ ] Copy `.env.example` → `.env.local` and fill in values
-- [ ] Verify local dev server: `npm run dev`
-- [ ] Initialize git: `git init && git add -A && git commit -m "initial scaffold from Ignition"`
-- [ ] Create GitHub repo and push: `gh repo create venture-home-expense-tracker --source . --push`
-- [ ] Set up `.auto-memory/` directory and `MEMORY.md` index
-- [ ] Update `.auto-memory/reference_venture-home-expense-tracker.md` with GitHub URL
+- [x] Verify local dev server: `npm run dev`
+- [x] Initialize git: `git init && git add -A && git commit -m "initial scaffold from Ignition"`
+- [x] Create GitHub repo and push: `gh repo create venture-home-expense-tracker --source . --push`
+- [x] Set up `.auto-memory/` directory and `MEMORY.md` index
+- [x] Update `.auto-memory/reference_venture-home-expense-tracker.md` with GitHub URL
+- [x] Configure GitHub Actions build checks for pushes and pull requests
 
 ### GCP & Cloud Run
 - [ ] Test Docker build: `docker build -t venture-home-expense-tracker . && docker run -p 8080:8080 venture-home-expense-tracker`

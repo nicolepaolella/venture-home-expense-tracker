@@ -14,12 +14,15 @@ type: project
 
 ## Architecture Decisions
 
-_None yet — record decisions here as they're made._
+- **CI baseline**: GitHub Actions runs `npm ci` and `npm run check` on pull requests and pushes to `main` and `cursor/**` branches. Reasoning: the current prototype has no automated test suite yet, so production build verification is the fastest useful regression check without introducing brittle placeholder tests.
 
 ## Component Map
 
-_Updated as components are built._
+- `src/app.jsx` — single-file React prototype for the manager dashboard and report detail flow
+- `.github/workflows/ci.yml` — CI workflow that verifies dependency installation and production build health
 
 ## Current State
 
-Phase 0 complete. Phase 1 setup pending.
+Phase 0 complete. Prototype UI exists and builds successfully.
+GitHub repo is connected and CI build checks are configured.
+Cloud Run runtime remains incomplete because `package.json` references `node server.js`, but `server.js` is not present in the repo yet.

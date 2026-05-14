@@ -11,8 +11,9 @@ type: reference
 - **Cloud Run URL**: TBD — set after first deploy
 - **Region**: us-east1
 - **GCS bucket**: TBD
-- **GitHub repo**: TBD — set during Phase 1
-- **Local path**: `~/Documents/Claude/projects/venture-home-expense-tracker`
+- **GitHub repo**: `https://github.com/nicolepaolella/venture-home-expense-tracker` — confirmed from `git remote -v`
+- **Workspace path**: `/workspace` — confirmed in Cursor cloud agent
+- **CI checks**: GitHub Actions workflow at `.github/workflows/ci.yml` runs `npm ci` and `npm run check` on pull requests and pushes to `main` and `cursor/**` branches
 
 ## Environment Variables
 
