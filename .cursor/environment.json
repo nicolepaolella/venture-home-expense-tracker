@@ -1,0 +1,7 @@
+{
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "install": "bash .cursor/setup-gcloud.sh && npm install"
+}

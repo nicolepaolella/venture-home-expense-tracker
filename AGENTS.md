@@ -597,6 +597,18 @@ Open the project in multiple VS Code windows, activate Copilot Chat in each with
 
 ---
 
+## Cursor Cloud specific instructions
+
+- The cloud-agent environment is defined in `.cursor/environment.json` and `.cursor/Dockerfile`.
+- Future cloud agents should start with Node 22 and `google-cloud-cli` already installed when this repo-level environment is active.
+- The environment `install` command runs `bash .cursor/setup-gcloud.sh && npm install` from the repo root.
+- For authenticated Cloud Run deploys, configure a Cursor cloud-environment secret named `GCP_SERVICE_ACCOUNT_KEY_JSON` that contains the full service-account key JSON for a deploy-capable service account.
+- Optional override: set `GCP_PROJECT_ID` if the deploy target ever differs from `venture-home-expense-tracker`.
+- If your environment already mounts a credential file, `GOOGLE_APPLICATION_CREDENTIALS` is also supported by `.cursor/setup-gcloud.sh`.
+- After startup, verify cloud auth with `gcloud auth list` and `gcloud config get-value project` before deploying.
+
+---
+
 ## Compaction Defense System
 
 Context compaction is inevitable on long sessions. The defense is aggressive proactive writing — not reactive scrambling.

@@ -14,7 +14,10 @@ type: reference
 - **GitHub repo**: `https://github.com/nicolepaolella/venture-home-expense-tracker` — confirmed from `git remote -v`
 - **Workspace path**: `/workspace` — confirmed in Cursor cloud agent
 - **CI checks**: GitHub Actions workflow at `.github/workflows/ci.yml` runs `npm ci` and `npm run check` on pull requests and pushes to `main` and `cursor/**` branches
-- **Deployment tooling status**: Google Cloud CLI installed in the cloud agent, but `gcloud auth list` is empty so Cloud Run deploys are currently blocked on credentials
+- **Cloud agent environment config**: `.cursor/environment.json` builds from `.cursor/Dockerfile` and runs `bash .cursor/setup-gcloud.sh && npm install`
+- **Cloud agent deploy secret**: `GCP_SERVICE_ACCOUNT_KEY_JSON` — environment-scoped Cursor secret containing the deploy service account key JSON
+- **Optional cloud env override**: `GCP_PROJECT_ID` — defaults to `venture-home-expense-tracker`
+- **Deployment tooling status**: Repo-level cloud environment now provisions Node 22 and `google-cloud-cli`; authenticated Cloud Run deploys still depend on `GCP_SERVICE_ACCOUNT_KEY_JSON` or `GOOGLE_APPLICATION_CREDENTIALS`
 
 ## Environment Variables
 

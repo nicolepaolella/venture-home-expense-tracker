@@ -63,7 +63,8 @@ EZPass statements contain mix of tolls, payments, and credits that need manual e
 
 ### GCP & Cloud Run
 - [x] Add a real runtime entrypoint for production (`package.json` currently references `node server.js`, but `server.js` is missing)
-- [ ] Authenticate `gcloud` in the agent environment or provision service-account credentials for Cloud Run deploys
+- [x] Add repo-level Cursor cloud environment config for Node 22 + `google-cloud-cli`
+- [ ] Add Cursor cloud environment secret `GCP_SERVICE_ACCOUNT_KEY_JSON` for authenticated Cloud Run deploys
 - [ ] Test Docker build: `docker build -t venture-home-expense-tracker . && docker run -p 8080:8080 venture-home-expense-tracker`
 - [ ] Create GCP project: `gcloud projects create venture-home-expense-tracker --name="venture-home-expense-tracker"`
 - [ ] Link billing: https://console.cloud.google.com/billing/linkedaccount?project=venture-home-expense-tracker
