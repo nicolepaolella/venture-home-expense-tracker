@@ -1,0 +1,27 @@
+rules_version = '2';
+
+// Receipt photos live at receipts/{userId}/{filename}.
+// Only the signed-in @venturehome.com user that owns the path can upload.
+// Reads are allowed for any signed-in @venturehome.com user
+// (managers and payroll review need to view receipts).
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isVentureHome() {
+      return request.auth != null
+        && request.auth.token.email != null
+        && request.auth.token.email.lower().matches('.*@venturehome[.]com');
+    }
+
+    match /receipts/{userId}/{fileName=**} {
+      allow write: if isVentureHome() && request.auth.uid == userId
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow read: if isVentureHome();
+    }
+
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

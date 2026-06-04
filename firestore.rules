@@ -1,0 +1,39 @@
+rules_version = '2';
+
+// Phase 2 Firestore rules. Permissive at the collection level (any signed-in
+// venturehome.com user can read/write everything) and role-based at the UI
+// level. Tighten when we add custom claims or a /memberships collection.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isVentureHome() {
+      return request.auth != null
+        && request.auth.token.email != null
+        && request.auth.token.email.lower().matches('.*@venturehome[.]com');
+    }
+
+    match /users/{userId} {
+      allow read, write: if isVentureHome();
+    }
+
+    match /receipts/{receiptId} {
+      allow read, write: if isVentureHome();
+    }
+
+    match /reports/{reportId} {
+      allow read, write: if isVentureHome();
+    }
+
+    // Editable invite-email template (admin UI saves here)
+    match /settings/{docId} {
+      allow read, write: if isVentureHome();
+    }
+
+    // Outbound mail queue. The Trigger Email extension reads + sends; we only
+    // let signed-in venturehome users create new docs (no read/edit/delete).
+    match /mail/{docId} {
+      allow create: if isVentureHome();
+      allow read, update, delete: if false;
+    }
+  }
+}

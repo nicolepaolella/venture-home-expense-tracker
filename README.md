@@ -1,33 +1,47 @@
-# venture-home-expense-tracker
+# Venture Home Expense Prototype
 
-Mobile-first expense management system for solar field teams with receipt scanning, multi-level approval workflows, and accounting integration.
+GitHub-ready React/Vite frontend prototype for the Venture Home expense reimbursement platform.
 
-## Getting Started
+## What this includes
 
-**First time?** Open **QUICKSTART.pdf** — it walks you through everything step by step.
+- Employee, Manager, and Payroll/Admin prototype views
+- Receipt Library
+- Upload + autoscan simulation
+- Create Expense Report from unreported/rejected receipts
+- Manager approval queue
+- Payroll review queue
+- Awaiting reimbursement tab
+- Bulk mark reimbursed
+- Receipt preview modal
+- Receipt-level rejection note workflow
+- Custom CSV/export field builder
+- Invite Users admin prototype
+- Users & Settings placeholder
+- Audit Trail
+- Developer Setup blueprint
+
+## Important
+
+This is a frontend prototype only.
+
+Not connected yet:
+- Real authentication
+- Real database
+- Real receipt file storage
+- Real OCR/autoscan
+- Real email notifications
+- Real payroll/CoAdvantage Quantum integration
+- Real audit logging backend
+
+## Run locally
 
 ```bash
 npm install
-bash setup.sh   # creates .env.local, prints next steps
 npm run dev
 ```
 
-## Deploy to Cloud Run
+Then open the local Vite URL.
 
-See PROJECT_INSTRUCTIONS.md for full deployment commands.
+## Production notes
 
-## User-Facing Documentation
-
-`USER_GUIDE.md` is the living, user-facing reference for this product. As features ship, a new entry is added describing what the feature does, how users interact with it, and anything important to know. When the project is ready to launch, `USER_GUIDE.md` is intended to be publishable as-is.
-
-## For AI Assistants
-
-Read these files in order:
-1. `.auto-memory/MEMORY.md` — canonical project index (follow its links)
-2. `AGENTS.md` — role definitions, memory system, session lifecycle
-3. `docs/memory/` — session history (newest first)
-4. `TODO.md` — current project state and roadmap
-5. `PROJECT_INSTRUCTIONS.md` — project context and rules
-6. `STARTER_PROMPTS.md` — sequenced prompts for first sessions
-
-**Shipping a user-facing feature?** Update `USER_GUIDE.md` in the same commit. See AGENTS.md → "User Guide Maintenance" for the rules.
+The role toggle is for prototype/demo only. In production, the user role should come from authentication and permissions.
