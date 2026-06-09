@@ -132,7 +132,7 @@ function Topbar({ active, perspective, setPerspective, setActive }) {
   return (
     <header className="sticky top-0 z-20 border-b border-cyan-300/10 bg-slate-950/75 px-4 py-4 backdrop-blur-xl md:px-8">
       <div className="flex items-center justify-between gap-4">
-        <div><p className="text-xs uppercase tracking-widest text-cyan-300">Venture Home Expense OS</p><h1 className="text-2xl font-black text-white md:text-3xl">{perspective === "admin" && active === "Dashboard" ? "Admin Dashboard" : perspective === "manager" && active === "Dashboard" ? "Manager Dashboard" : active}</h1></div>
+        <div><p className="text-xs uppercase tracking-widest text-cyan-300">VentureExpense</p><h1 className="text-2xl font-black text-white md:text-3xl">{perspective === "admin" && active === "Dashboard" ? "Admin Dashboard" : perspective === "manager" && active === "Dashboard" ? "Manager Dashboard" : active}</h1></div>
         <div className="hidden flex-1 items-center justify-end gap-4 md:flex">
           {isAdmin && (
             <div className="flex items-center rounded-2xl border border-cyan-300/15 bg-white/5 p-1" title="Admins can preview the app from each role">

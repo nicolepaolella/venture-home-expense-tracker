@@ -124,27 +124,32 @@ export default function ReceiptUpload({ profile, onUploaded }) {
     setPhase("preflight");
     setErrorMsg("");
 
-    if (!file.type.startsWith("image/")) {
-      setErrorMsg("Pick an image (JPG, PNG, HEIC). PDFs are not yet supported.");
+    const isImage = file.type.startsWith("image/");
+    const isPdf = file.type === "application/pdf";
+    if (!isImage && !isPdf) {
+      setErrorMsg("Pick an image (JPG, PNG, HEIC) or a PDF.");
       setPhase("error");
       return;
     }
     if (file.size > MAX_BYTES) {
-      setErrorMsg(`Image is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Max is 10 MB.`);
+      setErrorMsg(`File is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Max is 10 MB.`);
       setPhase("error");
       return;
     }
     if (file.size < MIN_BYTES) {
-      setErrorMsg("Image looks too small or compressed to read reliably. Retake with better lighting and full receipt in frame.");
+      setErrorMsg("File looks too small or compressed to read reliably. Retake with better lighting and full receipt in frame.");
       setPhase("error");
       return;
     }
 
-    const width = await getImageWidth(file);
-    if (width && width < MIN_WIDTH) {
-      setErrorMsg(`Image is only ${width}px wide. Need at least ${MIN_WIDTH}px for accurate scanning — move closer or use a higher-quality camera setting.`);
-      setPhase("error");
-      return;
+    // Only enforce image width on images — PDFs don't have a single width to check.
+    if (isImage) {
+      const width = await getImageWidth(file);
+      if (width && width < MIN_WIDTH) {
+        setErrorMsg(`Image is only ${width}px wide. Need at least ${MIN_WIDTH}px for accurate scanning — move closer or use a higher-quality camera setting.`);
+        setPhase("error");
+        return;
+      }
     }
 
     let newId;
@@ -197,7 +202,7 @@ export default function ReceiptUpload({ profile, onUploaded }) {
         );
       });
       const downloadUrl = await getDownloadURL(task.snapshot.ref);
-      await updateDoc(doc(db, "receipts", newId), { storagePath: path, downloadUrl });
+      await updateDoc(doc(db, "receipts", newId), { storagePath: path, downloadUrl, contentType: file.type });
       setPhase("scanning");
     } catch (err) {
       console.error("upload failed", err);
@@ -253,7 +258,7 @@ export default function ReceiptUpload({ profile, onUploaded }) {
         <input
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept="image/*,application/pdf"
           className="hidden"
           onChange={handleFile}
         />
@@ -331,13 +336,20 @@ export default function ReceiptUpload({ profile, onUploaded }) {
         </div>
 
         {scanResult.downloadUrl && (
-          <a href={scanResult.downloadUrl} target="_blank" rel="noopener noreferrer" className="block">
-            <img
-              src={scanResult.downloadUrl}
-              alt="Uploaded receipt"
-              className="max-h-72 rounded-xl border border-cyan-300/15 object-contain"
-            />
-          </a>
+          scanResult.contentType === "application/pdf" || (scanResult.fileName || "").toLowerCase().endsWith(".pdf") ? (
+            <a href={scanResult.downloadUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-xl border border-cyan-300/15 bg-white/[0.04] p-4 text-cyan-200 underline">
+              <span className="text-2xl">📄</span>
+              <span>Open uploaded PDF in new tab</span>
+            </a>
+          ) : (
+            <a href={scanResult.downloadUrl} target="_blank" rel="noopener noreferrer" className="block">
+              <img
+                src={scanResult.downloadUrl}
+                alt="Uploaded receipt"
+                className="max-h-72 rounded-xl border border-cyan-300/15 object-contain"
+              />
+            </a>
+          )
         )}
 
         <div className="grid gap-4 md:grid-cols-2">

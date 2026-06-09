@@ -25,7 +25,9 @@ exports.scanReceipt = onObjectFinalized(
     const contentType = event.data.contentType || "";
 
     if (!filePath.startsWith("receipts/")) return null;
-    if (!contentType.startsWith("image/")) return null;
+    const isImage = contentType.startsWith("image/");
+    const isPdf = contentType === "application/pdf";
+    if (!isImage && !isPdf) return null;
 
     const parts = filePath.split("/");
     if (parts.length < 3) return null;
@@ -48,8 +50,31 @@ exports.scanReceipt = onObjectFinalized(
       );
 
       const gcsUri = "gs://" + bucket + "/" + filePath;
-      const [result] = await visionClient.documentTextDetection(gcsUri);
-      const annotation = result.fullTextAnnotation;
+      let annotation;
+      if (isPdf) {
+        // Vision API requires the batchAnnotateFiles entry point for PDF input.
+        // It processes up to 5 pages per call; EZPass statements are typically
+        // 1-3 pages. We concatenate fullTextAnnotation.text from each page so
+        // the rest of the parser code (vendor/date/amount) sees a single
+        // text blob just like an image scan would.
+        const [batchResult] = await visionClient.batchAnnotateFiles({
+          requests: [{
+            inputConfig: {
+              gcsSource: { uri: gcsUri },
+              mimeType: "application/pdf",
+            },
+            features: [{ type: "DOCUMENT_TEXT_DETECTION" }],
+            pages: [1, 2, 3, 4, 5],
+          }],
+        });
+        const responses = (batchResult.responses && batchResult.responses[0] && batchResult.responses[0].responses) || [];
+        const combinedText = responses.map((r) => (r.fullTextAnnotation && r.fullTextAnnotation.text) || "").join("\n");
+        const combinedPages = responses.flatMap((r) => (r.fullTextAnnotation && r.fullTextAnnotation.pages) || []);
+        annotation = { text: combinedText, pages: combinedPages };
+      } else {
+        const [result] = await visionClient.documentTextDetection(gcsUri);
+        annotation = result.fullTextAnnotation;
+      }
 
       if (!annotation || !annotation.text) {
         await docRef.set(
@@ -172,6 +197,38 @@ function parseReceipt(annotation) {
     if (matches.length > 0) {
       amountValue = parseFloat(matches[matches.length - 1].replace(/[^0-9.]/g, ""));
       amountConfidence = 0.5; // forces needs_review
+    }
+  }
+
+  // --- EZPass / toll-statement override ---
+  // Toll statements list each toll as a separate row with a negative amount
+  // (deduction from a prepaid balance). The standard TOTAL parser typically
+  // picks up the running balance or a credit — neither is what the employee
+  // needs reimbursed. Strategy:
+  //   1. If we can find an explicit "Total Tolls" line, use that.
+  //   2. Otherwise, sum every negative amount on the statement (each toll).
+  const isEzpass = /\b(e-?zpass|ezpass|i-?pass|sunpass|fastrak|fasttrak|toll[\s-]*by[\s-]*plate)\b/i.test((vendorLine || "") + " " + fullText);
+  if (isEzpass) {
+    const tollTotalMatch = fullText.match(/(?:total\s*tolls?|toll\s*total|tolls?\s*total|total\s*amount\s*charged)\s*[:\-]?\s*\$?\s*(\d+(?:,\d{3})*\.\d{2})/i);
+    if (tollTotalMatch) {
+      amountValue = parseFloat(tollTotalMatch[1].replace(/,/g, ""));
+      amountConfidence = 0.9;
+    } else {
+      // Sum every negative amount: matches "-$1.05", "-1.05", "($1.05)", "(1.05)"
+      const negPattern = /-\s*\$?\s*(\d+(?:,\d{3})*\.\d{2})|\(\s*\$?\s*(\d+(?:,\d{3})*\.\d{2})\s*\)/g;
+      let summed = 0;
+      let count = 0;
+      let m;
+      while ((m = negPattern.exec(fullText)) !== null) {
+        const num = parseFloat(((m[1] || m[2]) || "0").replace(/,/g, ""));
+        if (Number.isFinite(num) && num > 0) { summed += num; count++; }
+      }
+      if (count > 0) {
+        amountValue = Math.round(summed * 100) / 100;
+        // Always force review for EZPass — the employee should eyeball the sum
+        // against the statement before submitting.
+        amountConfidence = 0.6;
+      }
     }
   }
 

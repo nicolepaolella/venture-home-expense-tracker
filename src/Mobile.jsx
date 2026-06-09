@@ -656,11 +656,18 @@ function MobileReceiptDetail({ receipt, onClose }) {
           <button onClick={onClose} className="rounded-xl border border-rose-300/20 bg-rose-500/10 px-3 py-1.5 text-xs font-bold text-rose-100">Close</button>
         </div>
         {receipt.downloadUrl ? (
-          <a href={receipt.downloadUrl} target="_blank" rel="noopener noreferrer" className="block">
-            <img src={receipt.downloadUrl} alt="Receipt" className="mx-auto max-h-72 rounded-xl border border-white/10 object-contain" />
-          </a>
+          receipt.contentType === "application/pdf" || (receipt.fileName || "").toLowerCase().endsWith(".pdf") ? (
+            <a href={receipt.downloadUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4 text-cyan-200 underline">
+              <span className="text-2xl">📄</span>
+              <span>Open PDF in new tab</span>
+            </a>
+          ) : (
+            <a href={receipt.downloadUrl} target="_blank" rel="noopener noreferrer" className="block">
+              <img src={receipt.downloadUrl} alt="Receipt" className="mx-auto max-h-72 rounded-xl border border-white/10 object-contain" />
+            </a>
+          )
         ) : (
-          <div className="grid h-40 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-sm text-slate-500">No image</div>
+          <div className="grid h-40 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-sm text-slate-500">No file</div>
         )}
         <div className="mt-4 space-y-3">
           {locked && <p className="rounded-xl border border-amber-300/30 bg-amber-500/10 p-3 text-xs text-amber-200">This receipt is on a submitted report — fields are read-only.</p>}
