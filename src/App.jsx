@@ -10,7 +10,7 @@ import {
 } from "./firestore.js";
 import ReceiptUpload from "./ReceiptUpload.jsx";
 import MobileLayout, { useIsMobile } from "./Mobile.jsx";
-import { InviteTemplateEditor, ComposeInviteModal, renderInviteEmail, useInviteTemplate } from "./InviteTemplate.jsx";
+import { InviteTemplateEditor, ComposeInviteModal, renderInviteEmail, loadTemplateForRole } from "./InviteTemplate.jsx";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "./firebase.js";
 
@@ -515,27 +515,31 @@ function InviteUsers({ users }) {
   const [form, setForm] = useState({ name: "", email: "", role: "Employee", manager: "", team: "" });
   const [composeFor, setComposeFor] = useState(null);
   const [toast, setToast] = useState("");
-  const { template } = useInviteTemplate();
   const isEmployee = form.role === "Employee";
   const managerProfile = users.find(u => u.name === form.manager);
   const autoTeam = managerProfile?.team || "";
   const teamShownForEmployee = autoTeam || (form.manager ? "(manager has no team set yet)" : "Pick a manager first");
 
   // Adds a doc to the `mail` collection. The Firebase "Trigger Email" extension
-  // watches this collection and sends the actual SMTP email. If the extension
-  // isn't installed yet, this doc just sits there harmlessly — no error.
+  // watches this collection and sends the actual SMTP email. The template is
+  // picked dynamically based on the user's role — Employee/Manager/Payroll/Admin
+  // each have their own editable template under Invite Template in the sidebar.
   async function sendInviteEmail(user) {
+    const role = user.role || "Employee";
+    const template = await loadTemplateForRole(role);
     const html = renderInviteEmail(template, user);
-    const text = `Hi ${(user.name || "").split(" ")[0] || "there"},\n\nYou've been invited to Venture Home Expense Tracker. Sign in at: ${template?.ctaUrl || ""}\n\nQuestions? Email payroll@venturehome.com.`;
+    const firstName = (user.name || "").split(" ")[0] || "there";
+    const text = `Hi ${firstName},\n\nYou've been invited to VentureExpense (${role}). Sign in at: ${template?.ctaUrl || ""}\n\nQuestions? Email payroll@venturehome.com.`;
     await addDoc(collection(db, "mail"), {
       to: [user.email],
       message: {
-        subject: template?.subject || "You're invited to Venture Home Expense Tracker",
+        subject: template?.subject || "You're invited to VentureExpense",
         html,
         text,
       },
       createdAt: serverTimestamp(),
       inviteUserId: user.id || null,
+      inviteRole: role,
     });
   }
 

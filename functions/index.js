@@ -209,26 +209,28 @@ function parseReceipt(annotation) {
   //   2. Otherwise, sum every negative amount on the statement (each toll).
   const isEzpass = /\b(e-?zpass|ezpass|i-?pass|sunpass|fastrak|fasttrak|toll[\s-]*by[\s-]*plate)\b/i.test((vendorLine || "") + " " + fullText);
   if (isEzpass) {
-    const tollTotalMatch = fullText.match(/(?:total\s*tolls?|toll\s*total|tolls?\s*total|total\s*amount\s*charged)\s*[:\-]?\s*\$?\s*(\d+(?:,\d{3})*\.\d{2})/i);
-    if (tollTotalMatch) {
-      amountValue = parseFloat(tollTotalMatch[1].replace(/,/g, ""));
-      amountConfidence = 0.9;
-    } else {
-      // Sum every negative amount: matches "-$1.05", "-1.05", "($1.05)", "(1.05)"
-      const negPattern = /-\s*\$?\s*(\d+(?:,\d{3})*\.\d{2})|\(\s*\$?\s*(\d+(?:,\d{3})*\.\d{2})\s*\)/g;
-      let summed = 0;
-      let count = 0;
+    // Sum every negative amount line by line, but SKIP any line that contains
+    // a total/balance/summary keyword. Otherwise the bottom "Total Tolls" line
+    // (which is itself a negative number representing the sum) gets added on
+    // top of each individual toll, doubling the result.
+    const summaryRe = /\b(total|balance|sub[\s-]*total|grand|summary|amount\s*due|amount\s*charged|amount\s*deducted|new\s*balance|opening|closing|previous|forward|deposit|payment\s*received|auto[\s-]*replenish|adjustment)\b/i;
+    const negPattern = /-\s*\$?\s*(\d+(?:,\d{3})*\.\d{2})|\(\s*\$?\s*(\d+(?:,\d{3})*\.\d{2})\s*\)/g;
+    let summed = 0;
+    let count = 0;
+    for (const line of lines) {
+      if (summaryRe.test(line)) continue;
       let m;
-      while ((m = negPattern.exec(fullText)) !== null) {
+      negPattern.lastIndex = 0;
+      while ((m = negPattern.exec(line)) !== null) {
         const num = parseFloat(((m[1] || m[2]) || "0").replace(/,/g, ""));
         if (Number.isFinite(num) && num > 0) { summed += num; count++; }
       }
-      if (count > 0) {
-        amountValue = Math.round(summed * 100) / 100;
-        // Always force review for EZPass — the employee should eyeball the sum
-        // against the statement before submitting.
-        amountConfidence = 0.6;
-      }
+    }
+    if (count > 0) {
+      amountValue = Math.round(summed * 100) / 100;
+      // Always force review for EZPass — the employee should eyeball the sum
+      // against the statement before submitting.
+      amountConfidence = 0.6;
     }
   }
 
